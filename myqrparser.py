@@ -61,7 +61,7 @@ class myQRParser():
 
 	def myCrapThread(self):
 		time.sleep(1)
-		myCode.decode_webcam(callback=self.codeRecognized, device='/dev/video1')
+		myCode.decode_webcam(callback=self.codeRecognized, device='/dev/video0')
 		#print('Finished, please ctrl+c')
 		self.interface.shutdown()
 		sys.exit(0)
@@ -86,23 +86,23 @@ class myQRParser():
 	def codeRecognized (self, data):
 		print data
 		if data == '1':
-			coords = [1, 1]
+			coords = 1
 			print "Dropzone 1"
 		elif data == '2':
-			coords = [2, 2]
+			coords = 2
 			print "Dropzone 2"
 		elif data == '3':
-			coords = [3, 3]
+			coords = 3
 			print "Dropzone 3"
 		else:
 			print data
 			return
 		print('Going to: ', coords)
-		pprzmsg = PprzMessage("ground", "MOVE_WAYPOINT")
-		pprzmsg.set_values([self.ac_id, self.waypoint_id, coords[0], coords[1], 30])
+		pprzmsg = PprzMessage("ground", "DL_SETTING")
+		pprzmsg.set_values([self.ac_id, self.waypoint_id, coords])
 		self.interface.send(pprzmsg)
-		pprzmsg.set_values([self.ac_id, (self.waypoint_id+1), coords[0], coords[1], 10])
-		self.interface.send(pprzmsg)
+		#pprzmsg.set_values([self.ac_id, (self.waypoint_id+1), coords[0], coords[1], 10])
+		#self.interface.send(pprzmsg)
 
 	def __call__(a, b, c):
 		print ""
